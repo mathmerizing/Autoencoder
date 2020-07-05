@@ -1,0 +1,9 @@
+/__pycache__
+/runs
+/datasets/*/*.gz
+/datasets/*/*.txt
+/datasets/*/__pycache__
+train_loss.txt
+test_loss.txt
+train_accuracy.txt
+test_accuracy.txt

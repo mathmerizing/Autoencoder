@@ -1,0 +1,12 @@
+File to keep track of datasets and sources. To add a dataset, put its title on top and add sources in the format "filename url" in the lines below. Just put empty lines between different sources.
+
+mnist
+train-data.gz http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz
+train-label.gz http://yann.lecun.com/exdb/mnist/train-labels-idx1-ubyte.gz
+test-data.gz http://yann.lecun.com/exdb/mnist/t10k-images-idx3-ubyte.gz
+test-label.gz http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz
+
+xor
+
+iris
+
