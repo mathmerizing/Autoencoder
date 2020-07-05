@@ -7,3 +7,5 @@ train_loss.txt
 test_loss.txt
 train_accuracy.txt
 test_accuracy.txt
+generator_loss.txt
+discriminator_loss.txt
