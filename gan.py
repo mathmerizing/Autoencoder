@@ -83,15 +83,15 @@ class GAN(MLP):
                         )
 
                 self.discriminator.feedforward(np.asarray(input))
-                self.discriminator.backpropagate(np.asarray(label), timeStep = i+1)
+                self.discriminator.backpropagate(np.asarray(label))
                 discriminatorLoss =  self.discriminator.getLoss(np.asarray(label))
 
                 # 2. Train generator
                 #fake_img = self.generator.feedforward(self.sample(batchSize))
                 self.discriminator.feedforward(fake_img)
-                self.discriminator.backpropagate(np.ones((1,batchSize)), timeStep = i+1, updateParameters = False)
+                self.discriminator.backpropagate(np.ones((1,batchSize)), updateParameters = False)
                 discriminatorGradient = self.discriminator.layers[0].gradient
-                self.generator.backpropagate(discriminatorGradient, timeStep = i+1, useLoss = False)
+                self.generator.backpropagate(discriminatorGradient, useLoss = False)
                 generatorLoss = self.discriminator.getLoss(np.ones((1,batchSize)))
 
                 if ind % 1000 < batchSize:

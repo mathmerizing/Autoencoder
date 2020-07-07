@@ -32,7 +32,7 @@ class Autoencoder(MLP):
         output the activations of the last layer of the Encoder,
         i.e. return the latent vector.
         """
-        return encoder.predict(input)
+        return self.encoder.predict(input)
 
 
     def train(self, dataset, loss = MSE(), epochs = 1, metrics = ["train_loss", "test_loss"], tensorboard = False, callbacks = {}):

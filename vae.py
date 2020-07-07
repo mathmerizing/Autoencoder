@@ -33,7 +33,7 @@ class Sampler():
 
         return self.sample
 
-    def backpropagate(self, lastGradient, timeStep = 1):
+    def backpropagate(self, lastGradient):
         gradLogVar = {}
         gradMean   = {}
         tmp        = self.outputDim * lastGradient.shape[1]
@@ -47,7 +47,7 @@ class Sampler():
         gradMean["MSE"]   = lastGradient
 
         # backpropagate gradients thorugh self.mean and self.logVar
-        return self.mean.backward(gradMean["KL"] + gradMean["MSE"], timeStep = timeStep) + self.logVar.backward(gradLogVar["KL"] + gradLogVar["MSE"], timeStep = timeStep)
+        return self.mean.backward(gradMean["KL"] + gradMean["MSE"]) + self.logVar.backward(gradLogVar["KL"] + gradLogVar["MSE"])
 
     def getKLDivergence(self, output):
         # output.shape[1] == batchSize
@@ -72,11 +72,11 @@ class VAE(MLP):
 
         return decoderOutput
 
-    def backpropagate(self, output, timeStep = 1):
-        self.decoder.backpropagate(output, timeStep = timeStep)
+    def backpropagate(self, output):
+        self.decoder.backpropagate(output)
         decoderGradient = self.decoder.layers[0].gradient
-        samplerGradient = self.sampler.backpropagate(decoderGradient, timeStep = timeStep)
-        self.encoder.backpropagate(samplerGradient, timeStep = timeStep, useLoss = False)
+        samplerGradient = self.sampler.backpropagate(decoderGradient)
+        self.encoder.backpropagate(samplerGradient,  useLoss = False)
 
     def train(self, dataset, loss = MSE(), epochs = 1, metrics = ["train_loss", "test_loss"], tensorboard = False, callbacks = {}):
         super().train(dataset, loss = loss, epochs = epochs, metrics = metrics, tensorboard = tensorboard, callbacks = callbacks, autoencoder = True, noise = None)

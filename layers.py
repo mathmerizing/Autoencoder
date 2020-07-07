@@ -79,7 +79,7 @@ class Dense(Layer):
         self.a = self.activation.apply(self.z)
         return self.a
 
-    def backward(self, lastGradient,timeStep = 1, outputLayer = False, updateParameters = True):
+    def backward(self, lastGradient, outputLayer = False, updateParameters = True):
         oldWeight = np.copy(self.weight)
         if not outputLayer:
             lastGradient *= self.activation.derivative(self.z)
@@ -90,8 +90,8 @@ class Dense(Layer):
             gradBias   = np.sum(lastGradient, axis=1)
 
             # update weights and biases with optimizer
-            self.weightOptimizer.optimize(self.weight, gradWeight,t = timeStep)
-            self.biasOptimizer.optimize(self.bias, gradBias,t = timeStep)
+            self.weightOptimizer.optimize(self.weight, gradWeight)
+            self.biasOptimizer.optimize(self.bias, gradBias)
 
         self.gradient = np.dot(oldWeight.T, lastGradient)
         return self.gradient

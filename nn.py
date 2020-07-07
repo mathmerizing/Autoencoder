@@ -95,7 +95,7 @@ class MLP():
         input  = input.reshape((input.shape[0], 1))
         return self.feedforward(input)
 
-    def backpropagate(self, output,timeStep = 1, useLoss = True, updateParameters = True):
+    def backpropagate(self, output, useLoss = True, updateParameters = True):
         r"""
         This is a vectorized backpropagation routine.
 
@@ -127,14 +127,14 @@ class MLP():
             # step 2:
             isOutputLayer = True
             for layer in self.layers[::-1]:
-                lastGradient = layer.backward(lastGradient,timeStep = timeStep, outputLayer = isOutputLayer, updateParameters = updateParameters )
+                lastGradient = layer.backward(lastGradient, outputLayer = isOutputLayer, updateParameters = updateParameters )
                 isOutputLayer = False
 
         else:
             isOutputLayer = False
             lastGradient  = output
             for layer in self.layers[::-1]:
-                lastGradient = layer.backward(lastGradient,timeStep = timeStep, outputLayer = isOutputLayer, updateParameters = updateParameters)
+                lastGradient = layer.backward(lastGradient, outputLayer = isOutputLayer, updateParameters = updateParameters)
 
 
     def train(self, dataset, loss = MSE(), epochs = 1, metrics = ["train_loss", "test_loss"], tensorboard = False, callbacks = {}, autoencoder = False, noise = None):
@@ -150,7 +150,7 @@ class MLP():
                     layer.setBatchSize(batchSize)
 
                 self.feedforward(train[0])
-                self.backpropagate(train[1],timeStep = i+1)
+                self.backpropagate(train[1])
 
                 if ind % 1000 < batchSize:
                     if "train_loss" in metrics:

@@ -27,8 +27,9 @@ class Adam(Optimizer):
         self.epsilon = 1e-8
         self.m = None #Initialize 1st momentum
         self.v = None #Initialize 2nd momentum
+        self.t = 0
 
-    def optimize(self, variable, variableGradient,t = 1):
+    def optimize(self, variable, variableGradient):
         r"""
         This is a vectorized Adam routine.
 
@@ -58,11 +59,13 @@ class Adam(Optimizer):
             self.m = np.zeros(variableGradient.shape)
             self.v = np.zeros(variableGradient.shape)
 
+        self.t = self.t + 1
+
         self.m = self.beta_1 * self.m + (1 - self.beta_1) * variableGradient                #Update biased first moment estimate
         self.v = self.beta_2 * self.v + (1- self.beta_2) * np.square(variableGradient)      #Update biased second raw moment estimate
 
-        m_hat = 1.0/(1.0- self.beta_1**t) * self.m                                             #Compute bias-corrected first moment estimate
-        v_hat = 1.0/(1.0- self.beta_2**t) * self.v                                             #Compute bias-correct second raw moment estimate
+        m_hat = 1.0/(1.0- self.beta_1**self.t) * self.m                                             #Compute bias-corrected first moment estimate
+        v_hat = 1.0/(1.0- self.beta_2**self.t) * self.v                                             #Compute bias-correct second raw moment estimate
 
         variable -= self.learningFactor * np.divide(m_hat,np.sqrt(v_hat)+ self.epsilon)
 
@@ -75,7 +78,7 @@ class SGD(Optimizer):
         self.momentum = momentum
         self.variable_update = None
 
-    def optimize(self, variable, variableGradient,t = 1):
+    def optimize(self, variable, variableGradient):
         r"""
         This is a vectorized stochastic gradient descent routine.
 
